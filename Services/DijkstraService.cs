@@ -1,4 +1,7 @@
-﻿namespace UniversityGraphAPI.Services
+﻿using System;
+using System.Collections.Generic;
+
+namespace UniversityGraphAPI.Services
 {
     public class DijkstraService
     {
@@ -7,15 +10,17 @@
             int source,
             int target)
         {
-            // Սկզբում բոլոր հեռավորությունները անսահման են
+            if (source == target) return (new List<int> { source }, 0);
+
             var dist = new Dictionary<int, double>();
             var prev = new Dictionary<int, int>();
             var pq = new PriorityQueue<int, double>();
 
             foreach (var node in graph.Keys)
+            {
                 dist[node] = double.MaxValue;
+            }
 
-            // Մեկնման կետի հեռավորությունը 0 է
             dist[source] = 0;
             pq.Enqueue(source, 0);
 
@@ -24,11 +29,11 @@
                 int u = pq.Dequeue();
 
                 if (u == target) break;
+                if (!graph.ContainsKey(u)) continue;
 
                 foreach (var (v, weight) in graph[u])
                 {
                     double newDist = dist[u] + weight;
-
                     if (newDist < dist[v])
                     {
                         dist[v] = newDist;
@@ -38,13 +43,20 @@
                 }
             }
 
-            // Ճանապարհը վերականգնել
+            if (!dist.ContainsKey(target) || dist[target] == double.MaxValue)
+                return (new List<int>(), 0);
+
             var path = new List<int>();
-            for (int at = target; prev.ContainsKey(at); at = prev[at])
-                path.Insert(0, at);
+            int current = target;
+            while (current != source)
+            {
+                path.Insert(0, current);
+                if (!prev.ContainsKey(current)) break;
+                current = prev[current];
+            }
             path.Insert(0, source);
 
-            return (path, Math.Round(dist[target], 2));
+            return (path, Math.Round(dist[target], 3)); // 3 նիշ ճշտության համար
         }
     }
 }

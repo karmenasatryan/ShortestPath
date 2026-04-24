@@ -2,117 +2,133 @@
 <html lang="hy">
 <head>
   <meta charset="UTF-8">
-  <title>Հայկական Համալսարաններ</title>
+  <title>Հայկական Համալսարաններ - Ճշգրիտ Քարտեզ</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background: #f0f2f5; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; }
 
     h1 {
       text-align: center;
       padding: 20px;
       background: #2c3e50;
       color: white;
-      font-size: 22px;
+      font-size: 24px;
+      letter-spacing: 1px;
     }
 
     .container {
       display: flex;
       gap: 20px;
       padding: 20px;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: auto;
     }
 
     .panel {
       background: white;
-      border-radius: 12px;
-      padding: 20px;
-      width: 300px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 15px;
+      padding: 25px;
+      width: 350px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
     }
+
+    label { font-weight: bold; margin-bottom: 5px; color: #34495e; }
 
     select, button {
       width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
+      padding: 12px;
+      margin-bottom: 15px;
       border-radius: 8px;
-      font-size: 14px;
+      border: 1px solid #ddd;
+      font-size: 15px;
     }
 
     button {
-      background: #3498db;
+      background: #27ae60;
       color: white;
       border: none;
+      font-weight: bold;
+      transition: background 0.3s;
       cursor: pointer;
     }
 
-    button:hover { background: #2980b9; }
+    button:hover { background: #219150; }
 
     .result {
-      margin-top: 16px;
-      padding: 14px;
-      background: #eaf4ff;
-      border-radius: 8px;
+      margin-top: 10px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-left: 4px solid #27ae60;
+      border-radius: 5px;
       display: none;
     }
 
+    #path-steps { font-size: 14px; line-height: 1.6; color: #555; }
+    #total-km { font-weight: bold; color: #c0392b; margin-top: 10px; font-size: 16px; }
+
     .leaflet-tooltip.label {
-      background: #3498db;
+      background: #2c3e50;
       color: white;
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 12px;
       border: none;
+      border-radius: 4px;
+      padding: 3px 7px;
+      font-weight: bold;
     }
 
     #map {
       flex: 1;
-      height: 550px;
-      border-radius: 12px;
+      height: 600px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
 
-<h1>🎓 Հայկական Համալսարանների Կարճ Ճանապարհ</h1>
+<h1>🎓 Համալսարանների Կարճագույն Երթուղի (Walker Mode)</h1>
 
 <div class="container">
   <div class="panel">
-
+    <label>Սկզբնակետ</label>
     <select id="from">
-      <option value="1">YSU</option>
-      <option value="2">AUA</option>
-      <option value="3">NPUA</option>
-      <option value="4">ASUE</option>
-      <option value="5">YSMU</option>
-      <option value="6">RAU</option>
-      <option value="7">ANAU</option>
-      <option value="8">Brusov</option>
-      <option value="9">GAA</option>
-      <option value="10">EUAM</option>
+      <option value="1">YSU (ԵՊՀ)</option>
+      <option value="2">AUA (Ամերիկյան)</option>
+      <option value="3">NPUA (Պոլիտեխնիկ)</option>
+      <option value="4">ASUE (Տնտեսագիտական)</option>
+      <option value="5">YSMU (Բժշկական)</option>
+      <option value="6">RAU (Սլավոնական)</option>
+      <option value="7">ANAU (Ագրարային)</option>
+      <option value="8">Brusov (Բրյուսով)</option>
+      <option value="9">UFAR (Ֆրանսիական)</option>
+      <option value="10">EUA (Եվրոպական)</option>
+      <option value="11">YSAFA (Գեղարվեստի)</option>
     </select>
 
+    <label>Destination</label>
     <select id="to">
-      <option value="1">YSU</option>
-      <option value="2">AUA</option>
-      <option value="3">NPUA</option>
-      <option value="4">ASUE</option>
-      <option value="5">YSMU</option>
-      <option value="6">RAU</option>
-      <option value="7">ANAU</option>
-      <option value="8">Brusov</option>
-      <option value="9">GAA</option>
-      <option value="10">EUAM</option>
+      <option value="2">AUA (Ամերիկյան)</option>
+      <option value="1">YSU (ԵՊՀ)</option>
+      <option value="3">NPUA (Պոլիտեխնիկ)</option>
+      <option value="4">ASUE (Տնտեսագիտական)</option>
+      <option value="5">YSMU (Բժշկական)</option>
+      <option value="6">RAU (Սլավոնական)</option>
+      <option value="7">ANAU (Ագրարային)</option>
+      <option value="8">Brusov (Բրյուսով)</option>
+      <option value="9">UFAR (Ֆրանսիական)</option>
+      <option value="10">EUA (Եվրոպական)</option>
+      <option value="11">YSAFA (Գեղարվեստի)</option>
     </select>
 
-    <button onclick="findPath()">Գտնել ճանապարհը</button>
+    <button onclick="findPath()">Գտնել Ճանապարհը</button>
 
     <div class="result" id="result">
+      <h4 style="margin-bottom:10px; color:#2c3e50;">Երթուղի՝</h4>
       <div id="path-steps"></div>
       <div id="total-km"></div>
     </div>
-
   </div>
 
   <div id="map"></div>
@@ -120,36 +136,37 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-  const map = L.map('map').setView([40.1872, 44.5152], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  // Կենտրոնացում Երևանի վրա իրական կոորդինատներով
+  const map = L.map('map').setView([40.1858, 44.5151], 14);
+  
+  // Google Maps-ի նման տեսքի համար օգտագործում ենք CartoDB տեսակը
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
 
+  // Իրական կոորդինատներ՝ վերցված Backend-ի նոր տվյալներից
   const universities = {
-    1:{name:"YSU",lat:40.1819,lng:44.5151},
-    2:{name:"AUA",lat:40.1872,lng:44.5154},
-    3:{name:"NPUA",lat:40.1734,lng:44.5081},
-    4:{name:"ASUE",lat:40.2012,lng:44.5234},
-    5:{name:"YSMU",lat:40.1923,lng:44.5187},
-    6:{name:"RAU",lat:40.2031,lng:44.5189},
-    7:{name:"ANAU",lat:40.1801,lng:44.5343},
-    8:{name:"Brusov",lat:40.1856,lng:44.5201},
-    9:{name:"GAA",lat:40.1790,lng:44.5110},
-    10:{name:"EUAM",lat:40.1950,lng:44.5270},
-    11:{name:"Metronom",lat:40.1841,lng:44.5155},
-    12:{name:"Cascade",lat:40.1888,lng:44.5092},
-    13:{name:"Republic Square",lat:40.1777,lng:44.5126},
-    14:{name:"Opera",lat:40.1874,lng:44.5137},
-    15:{name:"Kyevyan Bridge",lat:40.1811,lng:44.5085},
-    16:{name:"Mashtots Ave",lat:40.1820,lng:44.5130},
-    17:{name:"Baghramyan Ave",lat:40.1900,lng:44.5140},
-    18:{name:"Tigranakert",lat:40.1760,lng:44.5200},
-    19:{name:"Zoravar Andranik",lat:40.2000,lng:44.5160},
-    20:{name:"Komitas Junction",lat:40.2020,lng:44.5210},
+    1: {name:"YSU", lat:40.1819, lng:44.5265},
+    2: {name:"AUA", lat:40.1925, lng:44.5042},
+    3: {name:"NPUA", lat:40.1878, lng:44.5226},
+    4: {name:"ASUE", lat:40.1872, lng:44.5278},
+    5: {name:"YSMU", lat:40.1887, lng:44.5262},
+    6: {name:"RAU", lat:40.2115, lng:44.5028},
+    7: {name:"ANAU", lat:40.1895, lng:44.5245},
+    8: {name:"Brusov", lat:40.1865, lng:44.5101},
+    9: {name:"UFAR", lat:40.2101, lng:44.5298},
+    10: {name:"EUA", lat:40.1950, lng:44.5270},
+    11: {name:"YSAFA", lat:40.1815, lng:44.5185},
+    20: {name:"Opera", lat:40.1858, lng:44.5151},
+    21: {name:"Republic Sq", lat:40.1777, lng:44.5126},
+    22: {name:"Yeritasardakan", lat:40.1860, lng:44.5210},
+    23: {name:"Cascade", lat:40.1911, lng:44.5192},
+    24: {name:"Baghramyan Ave", lat:40.1900, lng:44.5140}
   };
 
-  // markers + names ALWAYS visible
+  // Ավելացնել բոլոր մարկերները քարտեզի վրա
   Object.values(universities).forEach(u => {
     const marker = L.marker([u.lat, u.lng]).addTo(map);
-
     marker.bindTooltip(`<b>${u.name}</b>`, {
       permanent: true,
       direction: 'top',
@@ -163,31 +180,48 @@
     const fromId = +document.getElementById('from').value;
     const toId = +document.getElementById('to').value;
 
-    const res = await fetch('http://localhost:5072/api/Path/shortest-path', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({fromId,toId})
-    });
+    try {
+      const res = await fetch('http://localhost:5072/api/Path/shortest-path', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({fromId, toId})
+      });
 
-    const data = await res.json();
+      if (!res.ok) throw new Error("Backend connection failed");
 
-    document.getElementById('path-steps').innerHTML =
-      data.path.map(p=>p.name).join("<br>");
+      const data = await res.json();
 
-    document.getElementById('total-km').textContent =
-      "Distance: "+data.totalKm+" km";
+      // Ցույց տալ քայլերը (Names)
+      document.getElementById('path-steps').innerHTML = 
+        data.path.map((p, index) => `${index + 1}. ${p.name}`).join("<br>");
 
-    document.getElementById('result').style.display='block';
+      // Ցույց տալ հեռավորությունը
+      document.getElementById('total-km').textContent = 
+        "Ընդհանուր հեռավորություն: " + data.totalKm + " կմ";
 
-    if(pathLine) map.removeLayer(pathLine);
+      document.getElementById('result').style.display = 'block';
 
-    const coords = data.path.map(p=>{
-      const u=universities[p.id];
-      return [u.lat,u.lng];
-    });
+      // Հեռացնել հին գիծը
+      if(pathLine) map.removeLayer(pathLine);
 
-    pathLine = L.polyline(coords,{color:'red'}).addTo(map);
-    map.fitBounds(pathLine.getBounds());
+      // Ստեղծել նոր գիծը ճշգրիտ կոորդինատներով
+      const coords = data.path.map(p => {
+        const u = universities[p.id];
+        return [u.lat, u.lng];
+      });
+
+      pathLine = L.polyline(coords, {
+        color: '#e74c3c',
+        weight: 5,
+        opacity: 0.8,
+        dashArray: '10, 10' // Կետագծեր քայլողի համար
+      }).addTo(map);
+
+      map.fitBounds(pathLine.getBounds(), { padding: [50, 50] });
+      
+    } catch (error) {
+      alert("Error: Համոզվեք, որ Backend-ը միացված է (localhost:5072)");
+    }
   }
 </script>
 
