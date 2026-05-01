@@ -4,10 +4,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // 1. Ավելացնում ենք սերվիսները
 builder.Services.AddControllers();
+
+// Ավելացնում ենք ձեր նախագծի հիմնական սերվիսները որպես Singleton
 builder.Services.AddSingleton<GraphService>();
 builder.Services.AddSingleton<DijkstraService>();
 
-// 2. Կարգավորում ենք CORS-ը այնպես, որ ոչ մի արգելք չլինի
+// 2. Կարգավորում ենք CORS-ը
+// Սա թույլ կտա ձեր index.html-ին հարցումներ ուղարկել backend-ին առանց արգելքների
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -23,15 +26,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 3. Միացնում ենք Swagger-ը միշտ (նույնիսկ եթե Development mode-ում չես)
+// 3. Միացնում ենք Swagger-ը
+// Քանի որ դուք ցանկանում եք, որ այն միշտ հասանելի լինի
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "University Graph API V1");
-    c.RoutePrefix = string.Empty; // Սա կբացի Swagger-ը հենց localhost:5072 հասցեով
+    c.RoutePrefix = string.Empty; // Սա կբացի Swagger-ը հիմնական հասցեով (localhost:5100)
 });
 
-// ԿԱՐԵՎՈՐ: UseCors-ը պետք է լինի UseRouting-ից հետո (եթե կա) և MapControllers-ից առաջ
+// ԿԱՐԵՎՈՐ: UseCors-ը պետք է կանչվի MapControllers-ից առաջ
 app.UseCors("AllowAll");
 
 app.MapControllers();
