@@ -90,7 +90,6 @@ namespace UniversityGraphAPI.Services
 
             foreach (var e in _edges)
             {
-                // Ապահովում ենք երկկողմանի կապը
                 graph[e.FromId].Add((e.ToId, e.DistanceKm));
                 graph[e.ToId].Add((e.FromId, e.DistanceKm));
             }
